@@ -1,9 +1,11 @@
-package winter_holiday_training_camp.Feb11th.xiaoA;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Wingfung Hung
+ */
 public class SignUpImplement implements InterfaceSignUp,InterfaceSignIn{
     @Override
     public void signUp() throws Exception {
@@ -15,31 +17,8 @@ public class SignUpImplement implements InterfaceSignUp,InterfaceSignIn{
             newUserName=inputUserName();
         }
         System.out.println("请输入密码：");
-//        Scanner scanner1=new Scanner(System.in);
-//        String password1 = scanner1.next();
-//        System.out.println("请再次输入密码：");
-//        String password2 = scanner1.next();
-//        if (password2.equals(password1)){
-//            System.out.println("成功！");
-//        }else {
-//            System.out.println("两次输入的密码不相同，请重新输入密码：");
-//            String Password = repeatedPassword();
-//        }
+
         String password=repeatedPassword();
-        //System.out.println(password);
-        //请输入手机号和邮箱用作找回密码
-//        System.out.println("请输入手机号用与重置密码：");
-//        if (readAllPhoneNumber(connection,enterPhoneNumber())){
-//            System.out.println("该手机号码已被注册过！请重新输入：");
-//        }else {
-//            if (readAllEmail(connection,enterEmail())){
-//                System.out.println("该电子邮箱已被注册过！请重新输入：");
-//
-//            }else {
-//                System.out.println("注册成功！");
-//                //写入所有数据到数据库
-//            }
-//        }
         ArrayList<Object> list=new ArrayList<>();
         list.add(newUserName);
         list.add(password);
@@ -85,9 +64,6 @@ public class SignUpImplement implements InterfaceSignUp,InterfaceSignIn{
     public void writeInformation(ArrayList<Object> list) throws SQLException {
         Connection connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/mysql_test","root","root");
         Statement statement=connection.createStatement();
-//        ResultSet resultSet=statement.executeQuery("select * from stu");
-//        ResultSetMetaData metaData= resultSet.getMetaData();
-//        int columnCount= metaData.getColumnCount();
         insert(statement,list);
     }
 }

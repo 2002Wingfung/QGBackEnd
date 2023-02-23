@@ -1,5 +1,3 @@
-package winter_holiday_training_camp.Feb11th.xiaoA;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,38 +5,43 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-//登录
+/**
+ * 登录
+ * @author Wingfung Hung
+ */
 public interface InterfaceSignIn {
+    /**
+     * 登录接口
+     * @param userName 用户名
+     * //@throws Exception
+     */
     void signIn(String userName) throws Exception;
-    //弄一个方法来读取数据库中的用户名
+
+    /**
+     *读取数据库中的用户名
+     * @param connection List< ArrayList<?>>对象
+     * @param userName 输入的用户名
+     * @return 返回true则说明该用户名已存在于数据库中，返回false则说明该用户名不存在
+     */
     default boolean readUserName(List<ArrayList<?>> connection,String userName){
         //connection.get()
         for (Object savedUserName:connection.get(1)){
-            //System.out.println(savedUserName);
             if (userName.equals(savedUserName)){
                 return true;
             }
         }
         return false;
     }
-    default int readUserNameIndex(List<ArrayList<?>> connection,String userName){
-        int i;
-        for (i=0;i<connection.get(1).size();i++){
-            if (userName.equals(connection.get(1).get(i))){
-                break;
-            }
-        }
-        return i+1;
-    }
+
+
+    /**
+     * 读取密码
+     * @param connection List< ArrayList<?>>对象
+     * @param userName 用户名
+     * @param password 密码
+     * @return 返回true则密码正确，返回false则密码错误
+     */
     default boolean readPassword(List<ArrayList<?>> connection,String userName,String password){
-        //
-//        for (Object savedUserName:connection.get(2)){
-//            //System.out.println(savedUserName);
-//            if (password.equals(savedUserName)){
-//                return true;
-//            }
-//        }
-//        return false;
         for (int i=0;i<connection.get(1).size();i++){
             if (connection.get(1).get(i).equals(userName)){
                 if (connection.get(2).get(i).equals(password)){
@@ -49,7 +52,12 @@ public interface InterfaceSignIn {
         return false;
     }
 
-    //连接数据库模块已完成
+    /**
+     *连接数据库模块
+     * @return List< ArrayList<?>>对象
+     * //@throws Exception
+     */
+
     default List<ArrayList<?>> connection() throws Exception{
         //1: 获取连接
         Connection connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/mysql_test","root","root");
@@ -70,7 +78,9 @@ public interface InterfaceSignIn {
         arrayLists.add(emailList);
 
         //3: 处理结果集
-        while (resultSet.next()){//获取每一行数据
+        //获取每一行数据
+        while (resultSet.next()){
+
             //获取每一列数据
             int id=resultSet.getInt(1);
             idList.add(id);

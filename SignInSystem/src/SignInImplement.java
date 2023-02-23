@@ -1,5 +1,3 @@
-package winter_holiday_training_camp.Feb11th.xiaoA;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,25 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-//登录
+/**
+ * 登录
+ * @author Wingfung Hung
+ * */
 public class SignInImplement implements InterfaceSignIn,InterfaceSignUp{
 
     @Override
     public void signIn(String userName) throws Exception {
 
         List<ArrayList<?>> connection=connection();
-//        if (readUserName(connection,userName)){
-//            System.out.println("请输入密码：");
-//            Scanner scanner=new Scanner(System.in);
-//            String password=scanner.next();
-//            if (readPassword(connection,userName,password)) {
-//                System.out.println("你好！"+userName);
-//            }else {
-//                System.out.println("密码错误，请重新输入：");
-//            }
-//        }else{
-//            System.out.println("重新输入用户名");
-//        }
         System.out.println("请输入密码：");
         Scanner scanner=new Scanner(System.in);
         String password=scanner.next();
@@ -34,8 +23,8 @@ public class SignInImplement implements InterfaceSignIn,InterfaceSignUp{
             System.out.println("你好！"+userName);
         }else {
             System.out.println("用户名或密码错误！\n重新尝试请按1+Enter;忘记密码请输入其他字符+Enter：");
-
-            if (new Scanner(System.in).next().equals("1")){
+            String number="1";
+            if (new Scanner(System.in).next().equals(number)){
                 this.signIn(inputUserName());
             }else {
                 if (readUserName(connection,userName)){
@@ -68,12 +57,10 @@ public class SignInImplement implements InterfaceSignIn,InterfaceSignUp{
 
     public SignInImplement() {
     }
-    //将重置后的密码写入数据库
+    /**
+     *将重置后的密码写入数据库
+     */
     public void changePassword(String password,String userName) throws SQLException {
-        //final int index=readUserNameIndex(connect,userName);
-        //System.out.println(index);
-        //System.out.println(connection.get(2).get(index));
-        //index是原来的密码的索引位置
         //将重置后的密码写入数据库
         Connection connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/mysql_test","root","root");
         Statement statement=connection.createStatement();
