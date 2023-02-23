@@ -1,10 +1,11 @@
-package winter_holiday_training_camp.ATMSystem;
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class ATMSystem {
+/**
+ * @author Wingfung Hung
+ */
+public class AtmSystem {
     public static void main(String[] args) {
         // 1、定义账户类
         // 2、定义一个集合容器，负责以后存储全部的账户对象，进行相关的业务操作.
@@ -31,6 +32,12 @@ public class ATMSystem {
                     break;
                 default:
                     System.out.println("您输入的操作命令不存在");
+            }
+            System.out.println("是否回到ATM系统的主界面？输入y返回主界面，输入其他字符则退出系统。");
+            String next = scanner.next();
+            if (!"y".equals(next)){
+                System.out.println("系统退出成功");
+                System.exit(0);
             }
         }
     }
@@ -95,22 +102,28 @@ public class ATMSystem {
                     // 查询账户(展示当前登录的账户信息)
                     showAccount(account);
                     break;
-                case 2://存款
+                case 2:
+                    //存款
                     depositMoney(scanner,account);
                     break;
-                case 3://取款
+                case 3:
+                    //取款
                     drawMoney(scanner,account);
                     break;
-                case 4://转账
+                case 4:
+                    //转账
                     transferMoney(scanner,account,accounts);
                     break;
-                case 5://修改密码
+                case 5:
+                    //修改密码
                     updatePassword(scanner,account);
                     return;
-                case 6://退出
+                case 6:
+                    //退出
                     System.out.println("退出成功");
                     return;
-                case 7://注销账户
+                case 7:
+                    //注销账户
                     if (deleteAccount(scanner,account,accounts)){
                         // 销户成功了，回到首页
                         return;
@@ -134,20 +147,18 @@ public class ATMSystem {
         System.out.println("==========用户销户==========");
         System.out.println("您真的要销户吗？输入\"y\"确认销户，输入其他字符则不销户。");
         String rs=scanner.next();
-        switch (rs){
-            case "y":
-                // 真正的销户
-                // 从当前账户集合中，删除当前账户对象，销毁就完成了。
-                if (account.getMoney()>0){
-                    System.out.println("您账户中还有钱没有取完，不允许销户~");
-                }else {
-                    accounts.remove(account);
-                    System.out.println("您的账户销户完成~~");
-                    return true;
-                }
-                break;
-            default:
-                System.out.println("好的，当前账户继续保留~");
+        if ("y".equals(rs)) {
+            // 真正的销户
+            // 从当前账户集合中，删除当前账户对象，销毁就完成了。
+            if (account.getMoney() > 0) {
+                System.out.println("您账户中还有钱没有取完，不允许销户~");
+            } else {
+                accounts.remove(account);
+                System.out.println("您的账户销户完成~~");
+                return true;
+            }
+        } else {
+            System.out.println("好的，当前账户继续保留~");
         }
         return false;
     }
@@ -169,6 +180,14 @@ public class ATMSystem {
                     // 2、输入新密码。
                     System.out.println("请您输入新密码:");
                     String newPassword=scanner.next();
+                    if (newPassword.length()<8){
+                        System.out.println("密码长度小于8位");
+                        continue;
+                    }
+                    if (newPassword.equals(password)){
+                        System.out.println("输入的新密码与原来的密码相同。");
+                        continue;
+                    }
                     System.out.println("请您确认新密码:");
                     String okPassword=scanner.next();
                     if (newPassword.equals(okPassword)){
@@ -195,7 +214,8 @@ public class ATMSystem {
     private static void transferMoney(Scanner scanner, Account account, ArrayList<Account> accounts) {
         System.out.println("==========用户转账操作==========");
         // 1、判断是否足够2个账户
-        if (accounts.size()<2){
+        int minAccount=2;
+        if (accounts.size()<minAccount){
             System.out.println("当前系统中，不足2个账户，不能进行转账，请去开户吧~~");
             return;
         }
@@ -236,7 +256,11 @@ public class ATMSystem {
                         // 判断余额是否足够
                         if (money>account.getMoney()){
                             System.out.println("对不起，您的余额不足，您最多可以转账: "+account.getMoney()+"元");
-                        }else {
+                        }else if (money==0) {
+                            System.out.println("转账金额为0，请重新输入。");
+                        } else if (money<0) {
+                            System.out.println("转账金额小于0，请重新输入。");
+                        } else {
                             // 余额足够，可以转了
                             account.setMoney(account.getMoney()-money);
                             account1.setMoney(account1.getMoney()+money);
@@ -259,7 +283,8 @@ public class ATMSystem {
     private static void drawMoney(Scanner scanner, Account account) {
         System.out.println("==========用户取钱操作==========");
         // 1、判断是否足够100元。
-        if (account.getMoney()<100){
+        int minMoney=100;
+        if (account.getMoney()<minMoney){
             System.out.println("对不起，当前账户中不够100元，不能取钱~");
             return;
         }
@@ -276,7 +301,11 @@ public class ATMSystem {
                 // 4、判断是否超过了账户的总余额
                 if (money>account.getMoney()){
                     System.out.println("余额不足，您账户目前总余额是: "+account.getMoney()+"元");
-                }else {
+                } else if (money==0) {
+                    System.out.println("取款金额为0，请重新输入。");
+                } else if (money<0) {
+                    System.out.println("取款金额小于0，请重新输入。");
+                } else {
                     // 可以取钱了。
                     System.out.println("恭喜您，取钱"+ money +"元，成功!");
                     // 更新余额
@@ -296,9 +325,18 @@ public class ATMSystem {
      */
     private static void depositMoney(Scanner scanner, Account account) {
         System.out.println("==========用户存钱操作==========");
-        System.out.println("请输入您存入的金额：");
-        double money=scanner.nextDouble();
-
+        double money;
+        while (true){
+            System.out.println("请输入您存入的金额：");
+            money=scanner.nextDouble();
+            if (money>0){
+                break;
+            }else if (money==0) {
+                System.out.println("取款金额为0，请重新输入。");
+            } else {
+                System.out.println("取款金额小于0，请重新输入。");
+            }
+        }
         // 更新账户余额: 原来的钱 + 新存入的钱
         account.setMoney(account.getMoney()+money);
         System.out.println("恭喜您，存钱成功，当前账户信息如下:");
@@ -331,6 +369,10 @@ public class ATMSystem {
         while (true){
             System.out.println("请您输入账户密码：");
             String password= scanner.next();
+            if (password.length()<8){
+                System.out.println("密码长度小于8位");
+                continue;
+            }
             System.out.println("请您输入确认密码：");
             String okPassword=scanner.next();
             if (okPassword.equals(password)){
@@ -362,18 +404,19 @@ public class ATMSystem {
         Random r=new Random();
         while (true) {
             // 1、先生成8位数字
-            String cardId="";
+            StringBuilder cardId= new StringBuilder();
 
-            for (int i = 0; i < 8; i++) {
-                cardId+=r.nextInt(10);
+            int randomNumber=8;
+            for (int i = 0; i < randomNumber; i++) {
+                cardId.append(r.nextInt(10));
 
             }
             // 2、判断这个8位的卡号是否与其他账户的卡号重复了
             // 根据这个卡号去查询账户的对象
-            Account account=getAccountByCardId(cardId,accounts);
+            Account account=getAccountByCardId(cardId.toString(),accounts);
             if (account==null){
                 // 说明cardId 此时没有重复，这个卡号是一个新卡号了，可以使用这个卡号作为新注册账户的卡号了
-                return cardId;
+                return cardId.toString();
             }
         }
     }
@@ -385,9 +428,8 @@ public class ATMSystem {
      * @return  账户对象 / null
      */
     private static Account getAccountByCardId(String cardId,ArrayList<Account> accounts){
-        for (int i = 0; i < accounts.size(); i++) {
-            Account account=accounts.get(i);
-            if (account.getCardId().equals(cardId)){
+        for (Account account : accounts) {
+            if (account.getCardId().equals(cardId)) {
                 return account;
             }
         }

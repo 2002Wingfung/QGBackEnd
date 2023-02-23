@@ -1,14 +1,19 @@
-package winter_holiday_training_camp.ATMSystem;
-
+/**
+ * @author Wingfung Hung
+ */
 public class Account {
-    /**
-     * 成员变量，私有
-     */
+    /*成员变量，私有*/
+
+    /**自动生成的卡号*/
     private String cardId;
-    private String userName;// 用户名
-    private String password; // 密码
-    private double money;// 账户余额
-    private double quotaMoney; // 每次取现额度
+    /** 用户名*/
+    private String userName;
+    /** 密码*/
+    private String password;
+    /** 账户余额*/
+    private double money;
+    /** 每次取现额度*/
+    private double quotaMoney;
 
     public String getCardId() {
         return cardId;
